@@ -17,7 +17,9 @@ const Navbar = () => {
 
       <div className="nav-container-buttons">
         <button type="button" className="cart-user">
+        <Link href="/user/login">
           <FaUserAlt />
+          </Link>
         </button>
 
         <button

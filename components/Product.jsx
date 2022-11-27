@@ -3,9 +3,9 @@ import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 import { urlFor } from "../lib/client";
 
-const Product = ({ product: { image, name, slug, price } }) => {
+const Product = ({ product: { image, name, slug, price }, isForSlider }) => {
   return (
-    <div className="my-card-product">
+    <div className={isForSlider ? "my-card-product-slider" : "my-card-product"}>
       <div className="product-card">
         <img
           src={urlFor(image && image[0])}

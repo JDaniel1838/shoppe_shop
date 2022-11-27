@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { client, urlFor } from "../../lib/client";
-import {
-  AiOutlineMinus,
-  AiOutlinePlus,
-  AiFillStar,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Product } from "../../components";
 import { useStateContext } from "../../context/StateContext";
 
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price } = product;
+
+  products = products.filter((el) => el.name !== name);
 
   const [index, setIndex] = useState(0);
   const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
@@ -83,7 +80,7 @@ const ProductDetails = ({ product, products }) => {
         <div className="marquee">
           <div className="maylike-products-container track">
             {products.map((item) => (
-              <Product key={item._id} product={item} />
+              <Product key={item._id} product={item} isForSlider={true} />
             ))}
           </div>
         </div>

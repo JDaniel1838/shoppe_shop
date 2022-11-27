@@ -2,13 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 const Context = createContext();
+const initialQty = 1;
 
 export const StateContext = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantities, setTotalQuantities] = useState(0);
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(initialQty);
 
   let foundProduct, index;
 
@@ -16,22 +17,48 @@ export const StateContext = ({ children }) => {
     const checkProductInCart = cartItems.find(
       (items) => items._id === product._id
     );
+
     setTotalPrice(
       (prevTotalPrice) => prevTotalPrice + product.price * quantity
     );
+
     setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
 
     if (checkProductInCart) {
-      const updateCartItems = cartItems.map((cartProduct) => {
-        if (cartProduct._id === product._id)
-          return {
+      /* const updatedCartItems = cartItems.map((cartProduct) => {
+        if (cartProduct._id === product._id) {
+          let currentProduct = {
             ...cartProduct,
             quantity: cartProduct.quantity + quantity,
           };
+          console.log(`Coinside ID: ${cartProduct._id}`);
+          console.log(`Voy a retornar: `);
+          console.log(currentProduct);
+          return currentProduct;
+        }
+        console.log(
+          `${cartProduct.name} no coincide con búsqueda,se ejecuto fuera del if`
+        );
+      });
+      setCartItems(updatedCartItems); */
+
+      const updatedCartIndex = cartItems.map((cartProduct, i) => {
+        if (cartProduct._id === product._id) return i;
       });
 
-      setCartItems(updateCartItems);
+      const updatedCartItems = [...cartItems];
+
+      console.log(updatedCartItems);
+      console.log("Recibo :");
+      console.log(product);
+      console.log(quantity);
+
+      updatedCartItems[updatedCartIndex].quantity =
+        updatedCartItems[updatedCartIndex].quantity + quantity;
+
+      setCartItems(updatedCartItems);
     } else {
+      console.log(`Este producto aun no esta en el carrito`);
       product.quantity = quantity;
 
       setCartItems([...cartItems, { ...product }]);
@@ -41,7 +68,6 @@ export const StateContext = ({ children }) => {
 
   const onRemove = (product) => {
     foundProduct = cartItems.find((item) => item._id === product._id);
-
     const newCartItems = cartItems.filter((item) => item._id !== product._id);
 
     setTotalPrice(
@@ -102,6 +128,7 @@ export const StateContext = ({ children }) => {
         qty,
         incQty,
         decQty,
+
         onAdd,
         setShowCart,
         toggleCartItemQuantity,
